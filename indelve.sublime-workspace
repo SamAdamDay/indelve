@@ -1,0 +1,604 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"per",
+				"percent"
+			],
+			[
+				"stat",
+				"statements"
+			],
+			[
+				"n",
+				"n"
+			],
+			[
+				"re",
+				"replace"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"k",
+				"k"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"get",
+				"get-status"
+			],
+			[
+				"c",
+				"checkstatus"
+			],
+			[
+				"server",
+				"server-home"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"time",
+				"timestamp"
+			],
+			[
+				"boder",
+				"border_color"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 54,
+				"line_ending": "Unix",
+				"name": "Indelve"
+			}
+		},
+		{
+			"contents": "*.pyc\n*.",
+			"file": ".gitignore",
+			"file_size": 5,
+			"file_write_time": 1407068450000000,
+			"settings":
+			{
+				"buffer_size": 8,
+				"line_ending": "Unix",
+				"name": "*.pyc"
+			}
+		}
+	],
+	"build_system": "Packages/Sam/Sam - Node.js.sublime-build",
+	"command_palette":
+	{
+		"height": 172.0,
+		"selected_items":
+		[
+			[
+				"pcip",
+				"Package Control: Install Package"
+			],
+			[
+				"pc",
+				"Package Control: List Packages"
+			],
+			[
+				"pcdp",
+				"Package Control: Disable Package"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"l",
+				"Local History: Browse"
+			],
+			[
+				"lh",
+				"Local History: Browse"
+			],
+			[
+				"pci",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"Pack",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: I",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 458.0
+	},
+	"console":
+	{
+		"height": 598.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/vincent/www/flan/paragraphs/en/content/promos/veoserv",
+		"/home/vincent/www/flan/content/site.css",
+		"/home/vincent/www/flan/templates/content/servers.php",
+		"/home/vincent/www/flan/templates/content/about.php",
+		"/home/vincent/www/flan/pages/servers.php",
+		"/home/vincent/.local/bin/bar-mine",
+		"/home/vincent/.config/bar/options",
+		"/home/vincent/.config/bar/out",
+		"/media/b31d4058-0788-49f4-81d0-7b2a249cb286/usr/local/bin/new-site",
+		"/home/.common/Code/Projects/libgee/gee/arraylist.vala",
+		"/home/vincent/.config/bar/in",
+		"/home/.common/.config/sublime-text-2/Packages/Vala/README",
+		"/home/vincent/.local/bin/shiftred",
+		"/home/vincent/.local/bin/handy",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/gtk-dark.css",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/gtk.css",
+		"/home/vincent/Documents/Prifysgol/Astudiaeth/Philosophy/Questions/metaphysics:micheal-j-loux.md",
+		"/home/vincent/.config/gtk-3.0/settings.ini",
+		"/home/vincent/.config/gnome-terminal/gtk-3.0/settings.ini",
+		"/home/vincent/.local/share/themes/Numix Light/gtk-3.0/gtk.css",
+		"/home/vincent/.local/share/themes/Numix Light/gtk-3.0/gtk-dark.css",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-2.0/gtkrc",
+		"/home/vincent/.local/share/themes/Sam Horizon/index.theme",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/gtk-widgets-assets-dark.css",
+		"/home/vincent/.local/share/themes/Numix Light/gtk-3.0/settings.ini",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/settings.ini",
+		"/home/vincent/.local/share/themes/Sam/gtk-3.0/gtk-dark.css",
+		"/home/vincent/.local/share/themes/Sam/gtk-2.0/gtkrc",
+		"/home/vincent/.local/share/themes/Sam/gtk-3.0/settings.ini",
+		"/home/vincent/.local/share/themes/Sam/gtk-3.0/gtk.css",
+		"/home/vincent/.config/openbox/rc.xml",
+		"/home/vincent/.config/autostart/redshift.desktop",
+		"/home/vincent/.local/bin/status-redshift",
+		"/home/vincent/.local/bin/toggle-redshift",
+		"/home/vincent/.local/bin/start-redshift",
+		"/home/vincent/.local/bin/server-home",
+		"/home/vincent/.local/bin/redshift-cmd",
+		"/home/.common/Code/Projects/base16-builder/schemes/atelier-seaside.yml",
+		"/home/vincent/.local/share/themes/Numix Dark/gtk-3.0/gtk.css",
+		"/home/vincent/.local/share/themes/Numix Dark/gtk-3.0/settings.ini",
+		"/home/vincent/history.db",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/gtk-widgets-assets.css",
+		"/home/vincent/.local/share/themes/Sam Horizon/gtk-3.0/gtk-widgets.css",
+		"/home/vincent/.local/share/themes/Numix Dark/gtk-2.0/gtkrc",
+		"/home/vincent/.config/redshift.conf",
+		"/home/.common/Code/Projects/base16-builder/schemes/sam-horizon.yml",
+		"/home/.common/.local/bin/start-redshift",
+		"/home/.common/.local/bin/status-redshift",
+		"/home/.common/.local/bin/toggle-redshift",
+		"/home/.common/.local/bin/colours.sh",
+		"/home/.common/.local/bin/colors.sh",
+		"/home/.common/.local/bin/spacey.sh",
+		"/home/vincent/.local/share/themes/Sam Horizon/openbox-3/themerc",
+		"/home/vincent/.config/openbox/autostart",
+		"/home/vincent/Code/Projects/bar-mine/network-manager",
+		"/home/.common/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/vincent/Downloads/Fonts/Envy Code R PR7/Read Me.txt",
+		"/home/vincent/Downloads/Fonts/Envy Code R PR7/Envy Code R Command Prompt.reg",
+		"/home/vincent/.cache/.fr-8sIlsZ/._AnonymousPro-1.002.001",
+		"/home/vincent/Code/Projects/goal/solutions/complete/english-spoken/sparklepigbang/goal.md",
+		"/home/vincent/Code/Projects/goal/solutions/complete/sed/sparklepigbang/goal",
+		"/home/vincent/.bash/command-not-found",
+		"/home/vincent/ftp",
+		"/home/.common/Code/Projects/goal/solutions/complete/english/sparklepigbang/goal.md",
+		"/home/vincent/Code/Projects/goal/solutions/complete/javascript/devongovett/goal.js",
+		"/home/vincent/Code/sh/projects/goal/goal.sh",
+		"/home/vincent/Code/sh/projects/goal/goal",
+		"/home/vincent/Downloads/Installation/PyPanel-2.4/pypanel",
+		"/home/vincent/.bash/prompt",
+		"/home/vincent/Downloads/Installation/PyPanel-2.4/ppmodule.c",
+		"/home/vincent/.config/bar/options.old",
+		"/home/vincent/aliases",
+		"/home/vincent/.bash/path",
+		"/home/vincent/.bash/mancolour.sh",
+		"/home/vincent/.bash/.bash",
+		"/home/.common/.local/bin/config-files",
+		"/home/.common/.local/bin/@",
+		"/home/vincent/Code/Projects/bar/README.pod",
+		"/home/vincent/Code/Projects/bar/bar.c",
+		"/home/vincent/.bashrc",
+		"/home/vincent/.local/bin/minecraft",
+		"/home/vincent/.bash/mancolor.sh",
+		"/home/vincent/.config/bar/opt",
+		"/home/vincent/Code/js/node/golf/fizzbuzz.js",
+		"/home/vincent/Code/Projects/Bar.old/bar.c",
+		"/home/vincent/Code/Projects/Bar/bar.c",
+		"/home/.common/.local/bin/pypanel",
+		"/home/vincent/.pypanelrc",
+		"/home/vincent/Downloads/Installation/bar-master/README.pod",
+		"/home/.common/.config/sublime-text-2/Packages/ClassHierarchy/ClassHierarchy.sublime-settings",
+		"/home/vincent/Downloads/Installation/bar-master/bar.c",
+		"/home/sam/.local/share/gnome-shell/extensions/window_buttons@biox.github.com/extension.js",
+		"/home/.common/Downloads/Installation/PyPanel-2.4/pypanel.sam",
+		"/home/vincent/.cache/.fr-eboDBK/INSTALL",
+		"/home/vincent/.cache/.fr-hOlYEF/INSTALL",
+		"/home/vincent/.cache/.fr-SKPvjM/pyxdg-0.25/setup.py",
+		"/home/vincent/Downloads/comment-1.txt",
+		"/home/vincent/.cache/.fr-EuloTV/pyxdg-0.25/xdg/__init__.py",
+		"/home/vincent/.cache/.fr-JCPkPV/pyxdg-0.25/setup.py",
+		"/home/vincent/.cache/.fr-Dj5e9v/pyxdg-0.25/xdg/Exceptions.py",
+		"/home/vincent/.cache/.fr-pYKAyx/pyxdg-0.25/README",
+		"/home/vincent/.cache/.fr-ZIxNGZ/pyxdg-0.25/setup.py",
+		"/home/vincent/.cache/.fr-fb4XEj/pyxdg-0.25/INSTALL",
+		"/media/b31d4058-0788-49f4-81d0-7b2a249cb286/usr/local/bin/optirun-java-minecraft",
+		"/home/vincent/.devilspie/set-icons.ds",
+		"/home/vincent/.local/bin/minecraft-server",
+		"/home/vincent/.local/bin/set-xdg-icon",
+		"/home/vincent/Downloads/Installation/INSTALL",
+		"/home/vincent/.cache/.fr-bBUkjX/PyPanel-2.4/pypanel",
+		"/home/vincent/.config/tint2/tint2rc",
+		"/media/b31d4058-0788-49f4-81d0-7b2a249cb286/etc/fstab",
+		"/home/vincent/.local/bin/set-icon-nice",
+		"/home/vincent/Downloads/Installation/fbpanel-6.1/INSTALL",
+		"/home/vincent/.cache/.fr-LIaMvK/devilspie-0.22/src/devilspie.c",
+		"/usr/share/themes/Adwaita/gtk-2.0/gtkrc",
+		"/usr/share/themes/BBstyle/gtk-2.0/gtkrc",
+		"/home/vincent/.local/share/themes/Sam/index.theme",
+		"/home/vincent/.xinitrc",
+		"/home/vincent/.local/share/icons/Sam/index.theme",
+		"/home/vincent/.local/share/themes/Sam/openbox-3/themerc",
+		"/home/vincent/.config/opensnap/hit_top",
+		"/home/vincent/.config/opensnap/hit_right",
+		"/home/vincent/.config/opensnap/hit_left",
+		"/home/vincent/.config/opensnap/hit_bottom",
+		"/home/sam/.local/share/icons/Sam-Numix/index.theme",
+		"/home/vincent/.cache/.fr-Ze45jC/Moka/index.theme",
+		"/home/vincent/.cache/.fr-FQpbX7/INSTALL",
+		"/usr/share/gnome-session/sessions/gnome.session"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"BASE0F",
+			"WHITE",
+			"banner",
+			"BASE0B",
+			"d64937",
+			"COL_MAIN",
+			"WHITE",
+			"#FFFFFF",
+			"redshift",
+			"createTray",
+			"dsp",
+			"createTray",
+			"TRAY",
+			"tray",
+			"tey",
+			"task",
+			" (\\[$(",
+			"utf",
+			">>>",
+			"overlay",
+			"Sam",
+			"monitor_t",
+			"calloc",
+			"bx",
+			"bw",
+			"ABC",
+			"monitor_new",
+			"window =",
+			"fill_rect",
+			"hidden",
+			"panel[TRAY]",
+			"self.panel[TRAY]",
+			"Obj",
+			"createTray",
+			"dsp",
+			"chrome",
+			"2d2d2d",
+			"base_color",
+			"menu",
+			"24",
+			"ppinit",
+			"FONT",
+			"0",
+			"Hide",
+			"Hidden",
+			"$1",
+			"shadow-type",
+			"Numix Light",
+			"murrine",
+			"button",
+			"titlebar",
+			"chrome",
+			"center",
+			"text.justify: center",
+			"<mousebind button=\"Left\" action=\"Drag\">",
+			"<mousebind button=\"Left\" action=\"Drag\">...</mousebind>",
+			"t",
+			"false",
+			"true",
+			"false",
+			"super-code",
+			"sub-code",
+			"true",
+			"false",
+			"console",
+			"$v",
+			"($v",
+			"$v",
+			"$h",
+			"$g",
+			"$f",
+			"$w",
+			" $w",
+			"$w",
+			"w",
+			" $w",
+			"$w",
+			"$n",
+			"$v",
+			"[^a-z]g",
+			"g",
+			"z",
+			"$x",
+			"$r",
+			"$w",
+			"$t",
+			"$f",
+			"e",
+			"y",
+			"$z",
+			"$v",
+			"$g",
+			"$d",
+			"$c",
+			"_z",
+			"_c",
+			"(",
+			"20",
+			"\\\\",
+			"movement",
+			"l[^a-z]",
+			"l ",
+			"\"",
+			"\\\"",
+			"\",",
+			",",
+			"sub",
+			"javascript",
+			"$a",
+			"1",
+			"z = 1",
+			"||",
+			"&&",
+			"z",
+			"❞",
+			"_o",
+			"$o",
+			"`",
+			"\"",
+			"Ö",
+			";",
+			"c",
+			"connection",
+			"'",
+			"c =",
+			"c=",
+			"UP",
+			"ø"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"5500AA",
+			"FGMAIN",
+			"COL_MAIN",
+			"$WHITE",
+			"$xid",
+			"text.justify: left",
+			"*super-code*",
+			"*sub-code*",
+			"_z",
+			"",
+			"js",
+			"\"",
+			"❞",
+			"`",
+			"\"",
+			"L",
+			"",
+			"S",
+			"$",
+			"equivalent",
+			"separately",
+			"\\bB",
+			"\\bD",
+			"\\end{solution}",
+			"\\begin{solution}",
+			"",
+			"'' ",
+			" ``",
+			"",
+			"Sam/Sam"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "README.md",
+					"settings":
+					{
+						"buffer_size": 54,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								54,
+								54
+							]
+						],
+						"settings":
+						{
+							"auto_name": "Indelve",
+							"color_scheme": "Packages/User/Color Highlighter/themes/base16-atelierseaside.dark.tmTheme",
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": ".gitignore",
+					"settings":
+					{
+						"buffer_size": 8,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8,
+								8
+							]
+						],
+						"settings":
+						{
+							"auto_name": "*.pyc",
+							"color_scheme": "Packages/User/Color Highlighter/themes/base16-atelierseaside.dark.tmTheme",
+							"syntax": "Packages/Git Config/Git Ignore/Git Ignore.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 27.0
+	},
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
