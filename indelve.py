@@ -2,6 +2,7 @@
 
 import os
 import argparse
+import datetime
 from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
@@ -9,6 +10,7 @@ def getXdgApplicationFiles():
 	"""Provide a list of the application files, with full paths.
 	Specification: http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html"""
 	files = []
+	# Loop over the directories in $XDG_DATA_DIRS (essentially; see xdg doc)
 	for directory in BaseDirectory.load_data_paths("applications"):
 		files.extend([os.path.join(directory,filename) for filename in os.listdir(directory)])
 	return files
@@ -22,11 +24,12 @@ class DatabaseFileParseError(Exception):
 	pass
 
 class Database:
-	"""The class for the database of application.s"""
+	"""The class for the database of applications."""
 
 	def __init__(self):
 		"""Initialise the class by loading up the database."""
-		self.database = []
+		self.database = [] # The database of applications
+		self.lastRefreshTime = None # The last time the application database was refreshed (datetime.datetime object)
 		self._loadApplications()
 
 	def _loadApplications(self):
@@ -39,9 +42,13 @@ class Database:
 		# Loop over the files in the application directories
 		for fullPath in getXdgApplicationFiles():
 			try:
+				# Try to add a dictionay of information about the application specified by `fullPath`
 				self.database.append(self._getApplicationDict(fullPath))
 			except (xdg.Exceptions.ParsingError, xdg.Exceptions.DuplicateGroupError, xdg.Exceptions.DuplicateKeyError, os.error, DatabaseFileParseError) as e:
 				pass
+
+		# The database is fresh now
+		self.lastRefreshTime = datetime.datetime.now()
 
 	def _getApplicationDict(self,fullPath):
 		"""Return a dict with information about the application specified by fullPath."""
@@ -72,10 +79,10 @@ class Database:
 			"icon": entry.getIcon()
 			}
 
-	def reload(self, force=True):
-		"""Reload the applications; only checking for new applictions, unless force=True"""
+	def refresh(self, force=True):
+		"""Reload the applications; only checking for new applictions, unless `force=True`"""
 
-		# If we're forcing, then delete and recreate the database, otherwise only look for new files
+		# If we're forcing, then delete and recreate the database; otherwise only look for new files
 		if force:
 			self.database = []
 			self._loadApplications()
