@@ -5,4 +5,3 @@ Indelve
 
 Requirements
 ------------
-- PyXDG

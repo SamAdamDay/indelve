@@ -1,8 +1,13 @@
 #!/usr/bin/python
 
+# Standard Library
+import sys
 import os
 import argparse
 from datetime import datetime
+
+# Import from `external` directory
+sys.path.insert(0,"external")
 from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
