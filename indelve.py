@@ -77,6 +77,13 @@ class Database:
 		if entry.getHidden():
 			raise DatabaseFileParseError("Is hidden")
 
+		# Test the `TryExec` key, if it exists
+		try:
+			if entry.findTryExec() == None:
+				raise DatabaseFileParseError("TryExec failed")
+		except xdg.Exceptions.NoKeyError: # If the key doesn't exist, silently ignore it
+			pass
+
 		# Make sure this isn't a screensaver
 		if "Screensaver" in entry.getCategories():
 			raise DatabaseFileParseError("Is screensaver")
