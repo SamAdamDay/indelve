@@ -26,6 +26,11 @@ class DatabaseLoadError(Exception):
 
 class DatabaseFileParseError(Exception):
 	"""An exception for when there's a problem parsing a file for the database."""
+	def __init__(self,fullPath,message):
+		self.message = message
+		self.fullPath = fullPath
+	def __str__(self):
+		return self.fullPath + ": " + self.message
 	pass
 
 class Database:
@@ -58,7 +63,11 @@ class Database:
 		try:
 			self.database.append(self._getApplicationDict(fullPath))
 			return True
-		except (xdg.Exceptions.ParsingError, xdg.Exceptions.DuplicateGroupError, xdg.Exceptions.DuplicateKeyError, os.error, DatabaseFileParseError) as e:
+		except (xdg.Exceptions.ParsingError, 
+			xdg.Exceptions.DuplicateGroupError, 
+			xdg.Exceptions.DuplicateKeyError, 
+			os.error, 
+			DatabaseFileParseError) as e:
 			return e
 
 	def _getApplicationDict(self,fullPath):
@@ -66,27 +75,31 @@ class Database:
 
 		# Check that this is a .desktop file
 		if not os.path.isfile(fullPath):
-			raise DatabaseFileParseError("Is directory")
+			raise DatabaseFileParseError(fullPath,"Is directory")
 		if str.lower(os.path.splitext(fullPath)[1]) != ".desktop":
-			raise DatabaseFileParseError("Isn't a .desktop file")
+			raise DatabaseFileParseError(fullPath,"Isn't a .desktop file")
 
-		# Try to parse the desktop file; any validation errors will be caught and ignored
+		# Try to parse the desktop file; this may produce exceptions
 		entry = DesktopEntry.DesktopEntry(fullPath)
 
 		# Make sure this isn't hidden (which is equivalent to not existing at all)
 		if entry.getHidden():
-			raise DatabaseFileParseError("Is hidden")
+			raise DatabaseFileParseError(fullPath,"Is hidden")
 
 		# Test the `TryExec` key, if it exists
 		try:
 			if entry.findTryExec() == None:
-				raise DatabaseFileParseError("TryExec failed")
+				raise DatabaseFileParseError(fullPath,"TryExec failed")
 		except xdg.Exceptions.NoKeyError: # If the key doesn't exist, silently ignore it
 			pass
 
 		# Make sure this isn't a screensaver
 		if "Screensaver" in entry.getCategories():
-			raise DatabaseFileParseError("Is screensaver")
+			raise DatabaseFileParseError(fullPath,"Is screensaver")
+
+		# Make sure is has a command to execute
+		if not entry.getExec():
+			raise DatabaseFileParseError(fullPath,"Has no `exec` key")
 
 		# Add the information from the file to the database
 		return {
@@ -97,7 +110,7 @@ class Database:
 			"icon": entry.getIcon()
 			}
 
-	def refresh(self, force=True):
+	def refresh(self, force=False):
 		"""Reload the applications; only checking for new applictions, unless `force=True`"""
 
 		# If we're forcing, then delete and recreate the database; otherwise only look for new files
@@ -116,4 +129,3 @@ class Database:
 
 if __name__ == '__main__':
 	database = Database()
-	print database.database
