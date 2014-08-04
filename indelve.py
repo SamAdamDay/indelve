@@ -2,7 +2,7 @@
 
 import os
 import argparse
-import datetime
+from datetime import datetime
 from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
@@ -29,7 +29,7 @@ class Database:
 	def __init__(self):
 		"""Initialise the class by loading up the database."""
 		self.database = [] # The database of applications
-		self.lastRefreshTime = None # The last time the application database was refreshed (datetime.datetime object)
+		self.lastRefreshTime = datetime.min # The last time the application database was refreshed (initially set a a LONG time ago)
 		self._loadApplications()
 
 	def _loadApplications(self):
@@ -41,14 +41,20 @@ class Database:
 
 		# Loop over the files in the application directories
 		for fullPath in getXdgApplicationFiles():
-			try:
-				# Try to add a dictionay of information about the application specified by `fullPath`
-				self.database.append(self._getApplicationDict(fullPath))
-			except (xdg.Exceptions.ParsingError, xdg.Exceptions.DuplicateGroupError, xdg.Exceptions.DuplicateKeyError, os.error, DatabaseFileParseError) as e:
-				pass
+			# Try to add a dictionay of information about the application specified by `fullPath`
+			self._addApplication(fullPath)
 
 		# The database is fresh now
-		self.lastRefreshTime = datetime.datetime.now()
+		self.lastRefreshTime = datetime.now()
+
+	def _addApplication(self,fullPath):
+		"""Add the details of the application specified by `fullPath`, if possible.
+		Returns `True` on success, and the exception that occured on failure."""
+		try:
+			self.database.append(self._getApplicationDict(fullPath))
+			return True
+		except (xdg.Exceptions.ParsingError, xdg.Exceptions.DuplicateGroupError, xdg.Exceptions.DuplicateKeyError, os.error, DatabaseFileParseError) as e:
+			return e
 
 	def _getApplicationDict(self,fullPath):
 		"""Return a dict with information about the application specified by fullPath."""
@@ -87,7 +93,14 @@ class Database:
 			self.database = []
 			self._loadApplications()
 		else:
-			pass
+			# Loop over the files in the application directories
+			for fullPath in getXdgApplicationFiles():
+
+				# If one was modified since the last load, then attempt to load it up
+				modifiedTime = datetime.fromtimestamp(os.path.getmtime())
+				if modifiedTime > self.lastRefreshTime:
+					self._addApplication(fullPath)
+
 
 if __name__ == '__main__':
 	database = Database()
