@@ -29,6 +29,7 @@ class Provider:
 		Must provide a list of <item-dict>'s, each with the following keys:
 			"relevance"     : The relevance of the item to `query`
 			"name"          : The main displayed name of the item
+            "exec"          : A command to execute if the item is selected
 			"desciription"  : (optionally empty) A short desciription
 			"icon"          : (optionally empty) Either the absolute path or the XDG icon name of an icon associated with the item
 			                    (see http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html)
