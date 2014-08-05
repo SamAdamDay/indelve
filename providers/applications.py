@@ -37,6 +37,7 @@ class FileParseError(Exception):
 class Provider(abstract.Provider):
 	"""The provider for application searching."""
 
+
 	# The dictionary recording how search results are scored based on the query
 	SCORING = {
 		"substring": { 					# Matching whole substrings
@@ -54,15 +55,45 @@ class Provider(abstract.Provider):
 				"name": 		2500,
 				"comment":		750,
 				"genericName":	1800
+			},
+			"-multiples": {				# Penalise searches that match in multiple keys - these tend to have skewed results otherwise
+				0:				0,
+				1:				0,
+				2:				2000,
+				3:				4000
+			}
+		},
+		"acronym": {					# Matching acronyms
+			"+found": {					# Increment when the acronym is found somewhere
+				"name":			3000,
+				"genericName":	2500,
+			},
+			"+start_string": {			# Additional increment for when it's at the start of the string
+				"name":			800,
+				"genericName":	800,
+			},
+			"+letter_word": {			# Additional increment per letter that is at the beginning of a word
+				"name":			1200,
+				"genericName":	1000,
+			},
+			"+letter_capital": {		# Additional increment per letter that is uppercase where the previous character is a lowercase letter
+				"name":			800,
+				"genericName":	700,
+			},
+			"-letter_non": {			# Penalty per letter not matching +letter_word or +letter_capital
+				"name":			500,
+				"genericName":	500,
 			}
 		}
 	}
+
 
 	def __init__(self):
 		"""Initialise the class by loading up the database."""
 		self.database = [] # The database of applications
 		self.lastRefreshTime = datetime.min # The last time the application database was refreshed (initially set a LONG time ago)
 		self._loadApplications()
+
 
 	def _loadApplications(self):
 		"""Load the applications from the XDG application paths."""
@@ -79,6 +110,7 @@ class Provider(abstract.Provider):
 		# The database is fresh now
 		self.lastRefreshTime = datetime.now()
 
+
 	def _addApplication(self,fullPath):
 		"""Add the details of the application specified by `fullPath`, if possible.
 		Returns `True` on success, and the exception that occured on failure."""
@@ -91,6 +123,7 @@ class Provider(abstract.Provider):
 			os.error, 
 			FileParseError) as e:
 			return e
+
 
 	def _getApplicationDict(self,fullPath):
 		"""Return a dict with information about the application specified by fullPath."""
@@ -132,6 +165,65 @@ class Provider(abstract.Provider):
 			"icon": entry.getIcon()
 			}
 
+
+	def _acronymMaxiumScore(self, string, acronym, key, first=False):
+		"""Recurively determine the maximal score when finding `acronym` in `string` using `self.SCORING`. 
+
+		`acronym` is assumed to be lowercase and not contain " _-".
+		`key` is the application key being considered.
+		`first` specifies whether this is the first time through, and so if "+start_string" can be applied.
+		"""
+
+		# If there's no more acronym left then we've found a match!
+		if len(acronym) == 0:
+			return self.SCORING["acronym"]["+found"][key]
+
+		# The maximum score
+		maxScore = 0
+
+		# What's left of the string: it will be repeatedly shortened as the possible acronym matches are evaluates
+		stringLeft = string
+
+		# For each occurence of `acronym[0]`, determine the maximum score attained by selecting that as the beginning of the acronym match
+		while True:
+
+			# Determine the index of the first occurence in `string` of the first letter of the acronym
+			index = stringLeft.lower().find(acronym[0])
+
+			# If the first acronym letter isn't there, then we're done
+			if index == -1: 
+				break
+
+			# The score for the current letter (assume intially that is has nothing special about it)
+			letterScore = 0 - self.SCORING["acronym"]["-letter_non"][key]
+
+			# Determine whether this is the first letter of the original string (so also the beginning of a word)
+			if index == 0 and stringLeft == string and first:
+				letterScore = self.SCORING["acronym"]["+start_string"][key]
+				letterScore = self.SCORING["acronym"]["+letter_word"][key] # This is the only time this happens when `index` == 0, since `" " not in acronym`
+			# Determine whether this is the first letter of a word
+			if index > 0 and stringLeft[index-1] == " ":
+				letterScore = self.SCORING["acronym"]["+letter_word"][key]
+			# Determine whether this is an uppercase letter following a lowercase letter (note: the letter proceeding `stringLeft` is almost always `acronym[0]`)
+			if index > 0 and stringLeft[index].upper() == stringLeft[index] and stringLeft[index-1].lower() == stringLeft[index-1] and stringLeft[index-1].upper() != stringLeft[index-1]:
+				letterScore = self.SCORING["acronym"]["+letter_capital"][key]
+
+			# Remove up to and including the first match
+			stringLeft = stringLeft[index+1:]
+
+			# Determine the maximum score from stringLeft and the rest of the acronym
+			remainScore = self._acronymMaxiumScore(stringLeft, acronym[1:], key)
+
+			# Only include this as a possibility if the remained of the acronym actually matched the remained of the string
+			nextScore = letterScore + remainScore if remainScore != 0 else 0
+
+			# Calculate the rolling maximum
+			maxScore = max(maxScore, nextScore)
+
+		# This is the final calculated maximum score
+		return maxScore
+
+
 	def refresh(self, force=False):
 		"""Reload the applications; only checking for new applictions, unless `force=True`"""
 
@@ -148,6 +240,7 @@ class Provider(abstract.Provider):
 				if modifiedTime > self.lastRefreshTime:
 					self._addApplication(fullPath)
 
+
 	def search(self, query):
 		"""Search the database using `query`"""
 
@@ -160,33 +253,57 @@ class Provider(abstract.Provider):
 		# Get a lowercase verson of query
 		queryLower = query.lower()
 
-		# Search for whole substring matches
-		matchesSub = [] # A list of <item-dict>'s; specified by the abstract search method docstring
+		# All the matches
+		matches = [] # A list of <item-dict>'s; specified by the abstract search method docstring
+
+		# Loop through the database, looking for matches
 		for app in self.database:
-			# Set the score to 0 initially
-			score = 0
+
+			## Search for whole substring matches
+			# The score under substring
+			scoreSub = 0
+			# The number of keys in which there are matches
+			keysMatched = 0
 			# Add to the score using `self.SCORING`
 			for key in self.SCORING["substring"]["+found"].keys():
-				# Determine the indicies of the the substring `query`
-				index = app[key].lower().find(query)
+				# Determine the indicies of the the substring `queryLower`
+				index = app[key].lower().find(queryLower)
 				if index != -1:
+					keysMatched += 1
 					# Add to score for the match
-					score += self.SCORING["substring"]["+found"][key]
+					scoreSub += self.SCORING["substring"]["+found"][key]
 					if index == 0:
 						# Add to score for the match being at the start of the string
-						score += self.SCORING["substring"]["+start_string"][key]
+						scoreSub += self.SCORING["substring"]["+start_string"][key]
 					elif app[key][index-1] == " ":
 						# Add to the score for the match being at the start of a word
-						score += self.SCORING["substring"]["+start_word"][key]
+						scoreSub += self.SCORING["substring"]["+start_word"][key]
+			# Penalise multiple matches
+			scoreSub -= self.SCORING["substring"]["-multiples"][keysMatched]
 			# Matches for longer strings are more impressive
-			score *= math.log(len(query))/2 + 1 
+			scoreSub = int(scoreSub * (math.log(len(query))/5 + 1))
+
+			## Search for acronym matches ('gimp' matches 'GNU Image Manipulation Program' and 'low' matches 'LibreOffice Writer')
+			# The score under acronym
+			scoreAcr = 0
+			# Add to the score using `self.SCORING`
+			for key in self.SCORING["acronym"]["+found"].keys():
+				# Find the maximum possible score of matching an acronym recursively (this is pretty neat)
+				maxScore = self._acronymMaxiumScore(app[key],queryLower.translate(None," _-"),key,True)
+				# Calculate the rolling maximum (the keys searched are distinct, and searches will almost certainly be aiming for only one)
+				scoreAcr = max(scoreAcr,maxScore)
+
+			# The score is the max of the two match type scores (adding makes no sense since they represent differen types of search)
+			score = max(scoreSub,scoreAcr)
+
 			# If a match is found, then add it to the list of matches
 			if score > 0:
-				matchesSub.append({
+				matches.append({
 					"relevance": score,
 					"name": app["name"],
+					"exec": app["exec"],
 					"description": app["comment"],
 					"icon": app["icon"]
 					})
 
-		return matchesSub
+		return matches
