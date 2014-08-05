@@ -26,11 +26,11 @@ class Provider:
 	def search(self,query):
 		"""Provide results for `query`.
 
-		Must provide a list of dicts of the with the following keys:
+		Must provide a list of <item-dict>'s, each with the following keys:
 			"relevance"     : The relevance of the item to `query`
 			"name"          : The main displayed name of the item
 			"desciription"  : (optionally empty) A short desciription
 			"icon"          : (optionally empty) Either the absolute path or the XDG icon name of an icon associated with the item
-			                  (see http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html)
+			                    (see http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html)
 		"""
 		pass
