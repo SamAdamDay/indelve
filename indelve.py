@@ -3,6 +3,7 @@
 # Standard Library
 import sys
 import argparse
+from pprint import pprint
 
 # Import from 'external' directory
 sys.path.insert(1,"external")
@@ -16,4 +17,7 @@ if __name__ == '__main__':
 	providers = {
 		"applications" : providers.applications.Provider()
 	}
-	print providers["applications"].search("Hello")
+	items = providers["applications"].search(sys.argv[1])
+	items.sort(key=lambda a:a["relevance"])
+	for item in items:
+		print item["relevance"] , ": " , item["name"] , " [" + item["description"] , "]"

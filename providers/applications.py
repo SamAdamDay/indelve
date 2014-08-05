@@ -3,6 +3,7 @@
 # Standard Library 
 import os
 from datetime import datetime
+import math
 
 # Import from 'external' directory ("external" is added to `sys.path` in indelve.py)
 from xdg import BaseDirectory, DesktopEntry
@@ -36,8 +37,26 @@ class FileParseError(Exception):
 class Provider(abstract.Provider):
 	"""The provider for application searching."""
 
-	# Constants
-	MIN_QUERY_LEN = 2 # The minimul length a search query
+	# The dictionary recording how search results are scored based on the query
+	SCORING = {
+		"substring": { 					# Matching whole substrings
+			"+found": {					# Increment when the substring is found
+				"name": 		2500,
+				"comment":		750,
+				"genericName":	1800
+			},
+			"+start_string": {			# Additional increment for when it's at the start of the string
+				"name": 		3000,
+				"comment":		0,
+				"genericName":	2600
+			},
+			"+start_word": {			# Additional increment for when it's at the start of a word (but not the first)
+				"name": 		2500,
+				"comment":		750,
+				"genericName":	1800
+			}
+		}
+	}
 
 	def __init__(self):
 		"""Initialise the class by loading up the database."""
@@ -135,7 +154,39 @@ class Provider(abstract.Provider):
 		# Do some checking
 		if not isinstance(query, str):
 			raise TypeError("Parameter 'query' should be a string.")
-		if len(query) < self.MIN_QUERY_LEN:
-			raise ValueError("Parameter 'query' should have length at least "+self.MIN_QUERY_LEN+".")
+		if len(query) == 0:
+			raise ValueError("Parameter 'query' shouldn't be empty.")
 
-		return self.database
+		# Get a lowercase verson of query
+		queryLower = query.lower()
+
+		# Search for whole substring matches
+		matchesSub = [] # A list of <item-dict>'s; specified by the abstract search method docstring
+		for app in self.database:
+			# Set the score to 0 initially
+			score = 0
+			# Add to the score using `self.SCORING`
+			for key in self.SCORING["substring"]["+found"].keys():
+				# Determine the indicies of the the substring `query`
+				index = app[key].lower().find(query)
+				if index != -1:
+					# Add to score for the match
+					score += self.SCORING["substring"]["+found"][key]
+					if index == 0:
+						# Add to score for the match being at the start of the string
+						score += self.SCORING["substring"]["+start_string"][key]
+					elif app[key][index-1] == " ":
+						# Add to the score for the match being at the start of a word
+						score += self.SCORING["substring"]["+start_word"][key]
+			# Matches for longer strings are more impressive
+			score *= math.log(len(query))/2 + 1 
+			# If a match is found, then add it to the list of matches
+			if score > 0:
+				matchesSub.append({
+					"relevance": score,
+					"name": app["name"],
+					"description": app["comment"],
+					"icon": app["icon"]
+					})
+
+		return matchesSub
