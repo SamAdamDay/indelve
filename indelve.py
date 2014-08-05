@@ -20,4 +20,4 @@ if __name__ == '__main__':
 	items = providers["applications"].search(sys.argv[1])
 	items.sort(key=lambda a:a["relevance"])
 	for item in items:
-		print item["relevance"] , ": " , item["name"] , " [" + item["description"] , "]"
+		print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
