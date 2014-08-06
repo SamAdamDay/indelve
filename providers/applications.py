@@ -66,7 +66,7 @@ class Provider(abstract.Provider):
 		"acronym": {					# Matching acronyms
 			"+found": {					# Increment when the acronym is found somewhere
 				"name":			3000,
-				"genericName":	2500,
+				"genericName":	3000,
 			},
 			"+start_string": {			# Additional increment for when it's at the start of the string
 				"name":			800,
@@ -83,6 +83,10 @@ class Provider(abstract.Provider):
 			"-letter_non": {			# Penalty per letter not matching +letter_word or +letter_capital
 				"name":			500,
 				"genericName":	500,
+			},
+			"-letter_word_skip": {		# Penalty per letter that skips a word (e.g. "rv" matching "Remote Desktop Viewer")
+				"name":			1200,
+				"genericName":	1000,
 			}
 		}
 	}
@@ -137,6 +141,10 @@ class Provider(abstract.Provider):
 		# Try to parse the desktop file; this may produce exceptions
 		entry = DesktopEntry.DesktopEntry(fullPath)
 
+		# Make sure this is an application
+		if entry.getType() != "Application":
+			raise FileParseError(fullPath,"Isn't an application")
+
 		# Make sure this isn't hidden (which is equivalent to not existing at all)
 		if entry.getHidden():
 			raise FileParseError(fullPath,"Is hidden")
@@ -176,6 +184,7 @@ class Provider(abstract.Provider):
 
 		# If there's no more acronym left then we've found a match!
 		if len(acronym) == 0:
+			#print "0"
 			return self.SCORING["acronym"]["+found"][key]
 
 		# The maximum score
@@ -194,19 +203,27 @@ class Provider(abstract.Provider):
 			if index == -1: 
 				break
 
-			# The score for the current letter (assume intially that is has nothing special about it)
-			letterScore = 0 - self.SCORING["acronym"]["-letter_non"][key]
+			# The score for the current letter
+			letterScore = 0
 
 			# Determine whether this is the first letter of the original string (so also the beginning of a word)
-			if index == 0 and stringLeft == string and first:
-				letterScore = self.SCORING["acronym"]["+start_string"][key]
-				letterScore = self.SCORING["acronym"]["+letter_word"][key] # This is the only time this happens when `index` == 0, since `" " not in acronym`
+			if first and index == 0 and stringLeft == string:
+				letterScore += self.SCORING["acronym"]["+start_string"][key]
+				letterScore += self.SCORING["acronym"]["+letter_word"][key] # This is the only time this happens when `index` == 0, since `" " not in acronym`
 			# Determine whether this is the first letter of a word
 			if index > 0 and stringLeft[index-1] == " ":
-				letterScore = self.SCORING["acronym"]["+letter_word"][key]
+				letterScore += self.SCORING["acronym"]["+letter_word"][key]
 			# Determine whether this is an uppercase letter following a lowercase letter (note: the letter proceeding `stringLeft` is almost always `acronym[0]`)
 			if index > 0 and stringLeft[index].upper() == stringLeft[index] and stringLeft[index-1].lower() == stringLeft[index-1] and stringLeft[index-1].upper() != stringLeft[index-1]:
-				letterScore = self.SCORING["acronym"]["+letter_capital"][key]
+				letterScore += self.SCORING["acronym"]["+letter_capital"][key]
+
+			# If `letterScore` hasn't changed, then none of the conditions have held
+			if letterScore == 0:
+				letterScore = 0 - self.SCORING["acronym"]["-letter_non"][key]
+
+			# Determine whether this has skipped a word (see if there is a space in any of the characters of `string` up to `index` ajdusted to `string` -2)
+			if not first and " " in string[:index-len(stringLeft)-1]:
+				letterScore -= self.SCORING["acronym"]["-letter_word_skip"][key]
 
 			# Remove up to and including the first match
 			stringLeft = stringLeft[index+1:]
