@@ -313,6 +313,12 @@ class Provider(abstract.Provider):
 			# The score is the max of the two match type scores (adding makes no sense since they represent differen types of search)
 			score = max(scoreSub,scoreAcr)
 
+			# Make sure the score is valid
+			if score < abstract.Provider.RELEVANCE["min"]: # module.class.dictionay[string]! :)
+				score = abstract.Provider.RELEVANCE["min"]
+			if score > abstract.Provider.RELEVANCE["max"]:
+				score = abstract.Provider.RELEVANCE["max"]
+
 			# If a match is found, then add it to the list of matches
 			if score > 0:
 				matches.append({
