@@ -5,12 +5,15 @@ import os
 from datetime import datetime
 import math
 
-# Import from 'external' directory ("external" is added to `sys.path` in indelve.py)
+# Import from third party libraries
 from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
 # Import the abstract base class
 import abstract
+
+# Import from the utilities module
+from utilities import which
 
 def _getXdgApplicationFiles():
 	"""Provide a list of the application files, with full paths.
@@ -151,7 +154,7 @@ class Provider(abstract.Provider):
 
 		# Test the `TryExec` key, if it exists
 		try:
-			if entry.findTryExec() == None:
+			if which(entry.getTryExec()) == None:
 				raise FileParseError(fullPath,"TryExec failed")
 		except xdg.Exceptions.NoKeyError: # If the key doesn't exist, silently ignore it
 			pass

@@ -1,20 +1,11 @@
-import sys
 
-PY3 = sys.version_info[0] >= 3
-
-if PY3:
-    def u(s):
-        return s
-else:
-    # Unicode-like literals
-    def u(s):
-        return s.decode('utf-8')
-
+## The which() function
+# All this taken from https://github.com/takluyver/pyxdg/
 try:
     # which() is available from Python 3.3
     from shutil import which
 except ImportError:
-    import os
+    import os, sys
     # This is a copy of which() from Python 3.3
     def which(cmd, mode=os.F_OK | os.X_OK, path=None):
         """Given a command, mode, and a PATH string, return the path which

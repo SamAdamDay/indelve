@@ -2,11 +2,10 @@
 
 # Standard Library
 import sys
-import argparse
+from argparse import ArgumentParser
 from pprint import pprint
 
-# Import from 'external' directory
-sys.path.insert(1,"external")
+# Import from third party libraries
 from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
