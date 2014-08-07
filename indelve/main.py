@@ -19,6 +19,7 @@ import xdg.Exceptions
 
 # Import 'local' modules
 import bad # Warnings and exceptions
+from utilities import verifyItemDict
 
 
 
@@ -76,6 +77,9 @@ class Indelve:
 				results = self.providerInstances[name].search(query)
 			except ValueError:
 				continue
+			# Verify that each item is indeed an <item-dict>
+			for item in items:
+				assert isItemDict(item)
 			# Add the results to our list
 			items.extend(results)
 

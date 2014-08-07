@@ -5,6 +5,42 @@
 # - Functions
 # -----------------------------
 
+def isItemDict(dictionary):
+    """Verify that a dictionary is a valid <item-dict>, returning True or False.
+
+    See indelve.providers.abstract.Provider.search for a specification for <item-dict>.
+    """
+
+    try:
+
+        # Needs to actually be a dictionary
+        assert type(dictionary) is dict
+
+        # Check for required keys
+        assert "relevance" in dictionary
+        assert "name" in dictionary
+        assert "key" in dictionary
+
+        # Check the key-values are all of the correct type
+        assert type(dictionary["relevance"]) is unicode or type(dictionary["relevance"]) is str
+        assert type(dictionary["name"]) is unicode or type(dictionary["name"]) is str
+        assert type(dictionary["key"]) is unicode or type(dictionary["key"]) is str
+        if "desciription" in dictionary:
+            assert type(dictionary["desciription"]) is unicode or type(dictionary["desciription"]) is str
+        if "icon" in dictionary:
+            assert type(dictionary["icon"]) is unicode or type(dictionary["icon"]) is str
+
+        # Check the required keys are not empty
+        assert dictionary["relevance"] != ""
+        assert dictionary["name"] != ""
+        assert dictionary["key"] != ""
+
+    except AssertionError:
+        return False
+
+    return True
+
+
 ## The which() function
 # All this taken from https://github.com/takluyver/pyxdg/
 try:
