@@ -95,7 +95,7 @@ class Provider(abstract.Provider):
 	def _loadApplications(self):
 		"""Load the applications from the XDG application paths."""
 
-		# Make sure the current database is empty
+		# Make sure the current database is empty (sanity check)
 		if self.database != []:
 			raise LoadError("Database already loaded")
 
@@ -176,7 +176,7 @@ class Provider(abstract.Provider):
 		if len(acronym) == 0:
 			return self.SCORING["acronym"]["+found"][key]
 
-		# The maximum score
+		# The highest score
 		maxScore = 0
 
 		# What's left of the string: it will be repeatedly shortened as the possible acronym matches are evaluates

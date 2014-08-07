@@ -40,7 +40,7 @@ class Provider:
 		"""Refresh the database of items. 
 
 		If the provider does not have a database, then this should do nothing.
-		The `force` argument indicates that the provider should completely reload the database, not just check for new items
+		The `force` argument indicates that the provider should completely reload the database, not just check for new items.
 		"""
 		pass
 
