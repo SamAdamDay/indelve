@@ -19,7 +19,7 @@ import xdg.Exceptions
 
 # Import 'local' modules
 import bad # Warnings and exceptions
-from utilities import verifyItemDict
+from utilities import isItemDict
 
 
 
