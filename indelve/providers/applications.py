@@ -13,7 +13,7 @@ import xdg.Exceptions
 import abstract
 
 # Import from the utilities module
-from utilities import which
+from indelve.utilities import which
 
 def _getXdgApplicationFiles():
 	"""Provide a list of the application files, with full paths.
@@ -153,11 +153,8 @@ class Provider(abstract.Provider):
 			raise FileParseError(fullPath,"Is hidden")
 
 		# Test the `TryExec` key, if it exists
-		try:
-			if which(entry.getTryExec()) == None:
-				raise FileParseError(fullPath,"TryExec failed")
-		except xdg.Exceptions.NoKeyError: # If the key doesn't exist, silently ignore it
-			pass
+		if entry.getTryExec() != "" and which(entry.getTryExec()) == None:
+			raise FileParseError(fullPath,"TryExec failed")
 
 		# Make sure this isn't a screensaver
 		if "Screensaver" in entry.getCategories():
