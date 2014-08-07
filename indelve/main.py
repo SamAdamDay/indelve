@@ -1,5 +1,11 @@
 """An application searcher"""
 
+
+
+# -----------------------------
+# - Imports
+# -----------------------------
+
 # Standard Library
 import sys
 from argparse import ArgumentParser
@@ -13,6 +19,12 @@ import xdg.Exceptions
 
 # Import 'local' modules
 import bad # Warnings and exceptions
+
+
+
+# -----------------------------
+# - Main Classes
+# -----------------------------
 
 class Indelve:
 	"""Indelve: an application searcher.

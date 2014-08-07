@@ -1,7 +1,19 @@
 """Provides an abstract base class for search providers, specifying methods they must implement"""
 
+
+
+# -----------------------------
+# - Imports
+# -----------------------------
+
 # Standard Library
 from abc import ABCMeta, abstractmethod
+
+
+
+# -----------------------------
+# - Main Classes
+# -----------------------------
 
 class Provider:
 	"""Abstract base class for search providers"""

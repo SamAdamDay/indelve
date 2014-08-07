@@ -1,5 +1,11 @@
 """A provider that searches the installed applications, as specified by http://standards.freedesktop.org/desktop-entry-spec/latest/"""
 
+
+
+# -----------------------------
+# - Imports
+# -----------------------------
+
 # Standard Library 
 import os
 from datetime import datetime
@@ -15,27 +21,11 @@ import abstract
 # Import from the utilities module
 from indelve.utilities import which
 
-def _getXdgApplicationFiles():
-	"""Provide a list of the application files, with full paths.
-	Specification: http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html"""
-	files = []
-	# Loop over the directories in $XDG_DATA_DIRS (essentially; see xdg doc)
-	for directory in BaseDirectory.load_data_paths("applications"):
-		files.extend([os.path.join(directory,filename) for filename in os.listdir(directory)])
-	return files
 
-class LoadError(Exception):
-	"""An exception for when there's a problem loading the database."""
-	pass
 
-class FileParseError(Exception):
-	"""An exception for when there's a problem parsing a file for the database."""
-	def __init__(self,fullPath,message):
-		self.message = message
-		self.fullPath = fullPath
-	def __str__(self):
-		return self.fullPath + ": " + self.message
-	pass
+# -----------------------------
+# - Main Classes
+# -----------------------------
 
 class Provider(abstract.Provider):
 	"""The provider for application searching."""
@@ -330,3 +320,37 @@ class Provider(abstract.Provider):
 					})
 
 		return matches
+
+
+
+# -----------------------------
+# - Exceptions
+# -----------------------------
+
+class LoadError(Exception):
+	"""An exception for when there's a problem loading the database."""
+	pass
+
+class FileParseError(Exception):
+	"""An exception for when there's a problem parsing a file for the database."""
+	def __init__(self,fullPath,message):
+		self.message = message
+		self.fullPath = fullPath
+	def __str__(self):
+		return self.fullPath + ": " + self.message
+	pass
+
+
+
+# -----------------------------
+# - Functions
+# -----------------------------
+
+def _getXdgApplicationFiles():
+	"""Provide a list of the application files, with full paths.
+	Specification: http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html"""
+	files = []
+	# Loop over the directories in $XDG_DATA_DIRS (essentially; see xdg doc)
+	for directory in BaseDirectory.load_data_paths("applications"):
+		files.extend([os.path.join(directory,filename) for filename in os.listdir(directory)])
+	return files

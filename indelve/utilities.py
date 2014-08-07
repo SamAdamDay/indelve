@@ -1,4 +1,10 @@
 
+
+
+# -----------------------------
+# - Functions
+# -----------------------------
+
 ## The which() function
 # All this taken from https://github.com/takluyver/pyxdg/
 try:
