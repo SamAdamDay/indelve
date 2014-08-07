@@ -55,6 +55,18 @@ class Indelve:
 			self.providerInstances[provider] = providerModule.Provider()
 
 
+	def refresh(self,force=False):
+		"""Refresh all providers' databases, if that makes sense.
+
+		If the provider does not have a database, then this has no effect on them.
+		The `force` argument indicates that the providers should completely reload their databases, not just check for new items."""
+
+		# Loop through the provider instances
+		for name in self.providerInstances:
+			# Refresh this provider's database
+			self.providerInstances[name].refresh(force)
+
+
 	def search(self,query):
 		"""Search for `query` using all the loaded providers.
 
