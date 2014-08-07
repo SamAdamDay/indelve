@@ -174,7 +174,6 @@ class Provider(abstract.Provider):
 
 		# If there's no more acronym left then we've found a match!
 		if len(acronym) == 0:
-			#print "0"
 			return self.SCORING["acronym"]["+found"][key]
 
 		# The maximum score
