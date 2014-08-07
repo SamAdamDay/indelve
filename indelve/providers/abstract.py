@@ -56,5 +56,6 @@ class Provider:
 			"icon"          : (optionally empty) Either the absolute path or the XDG icon name of an icon associated with the item
 			                    (see http://standards.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html)
 		Note: The provider should give a list of ALL results matching the query (ie with non-zero relevance score), no matter how small the score. 
+		Any ValueErrors raised will be caught.
 		"""
 		pass
