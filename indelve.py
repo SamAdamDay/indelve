@@ -43,7 +43,7 @@ if __name__ == '__main__':
 		)
 	args = argParser.parse_args()
 
-	indelve = Indelve(["applications"])
+	indelve = Indelve()
 	items = indelve.search(args.query)
 	
 	for item in items:

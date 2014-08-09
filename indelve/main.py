@@ -40,6 +40,10 @@ class Indelve:
 		Issues a `bad.providerLoadWarning` when a provider couldn't be loaded
 		"""
 
+		# If `providers` is not specified, load all the provider modules
+		if providers == None:
+			providers = self.listProviders()
+
 		# The dictionary of `Provider` class instances
 		self.providerInstances = {}
 
@@ -53,6 +57,13 @@ class Indelve:
 				continue
 			# Now load the provider's `Provider` class; if there's an exception with this, then there's a real problem with the code, so let it pass through
 			self.providerInstances[provider] = providerModule.Provider()
+
+
+	def listProviders(self):
+		"""Lists the names of the possible provider modules"""
+
+		initModule = import_module("indelve.providers.__init__")
+		return initModule.__all__
 
 
 	def refresh(self,force=False):
