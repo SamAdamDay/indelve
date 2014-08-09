@@ -60,7 +60,7 @@ class Indelve:
 
 
 	def listProviders(self):
-		"""Lists the names of the possible provider modules"""
+		"""Lists the names of the possible provider modules."""
 
 		initModule = import_module("indelve.providers.__init__")
 		return initModule.__all__

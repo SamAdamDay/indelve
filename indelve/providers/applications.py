@@ -31,6 +31,13 @@ class Provider(abstract.Provider):
 	"""The provider for application searching."""
 
 
+	# The description of this provider
+	description = {
+		"short" :	"Searches installed applications.",
+		"long" : 	"Queries the list of installed applications. You can use normal query searching ('libre') or acronym searching ('low' matching 'LibreOffice Writer')."
+	}
+
+
 	# The dictionary recording how search results are scored based on the query
 	SCORING = {
 		"substring": { 					# Matching whole substrings

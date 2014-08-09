@@ -7,7 +7,7 @@
 # -----------------------------
 
 # Standard Library
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 
 
 
@@ -30,6 +30,16 @@ class Provider:
 		"excellent"     : 9000,     # An excellent match; almost certainly the intended result of the search
 		"max"           : 10000     # The maximum relevance score
 	}
+
+	@abstractproperty
+	def description():
+		"""A (read-only) dictionary containing the keys:
+			"short" : A single sentence briefly summarising the Provider. Should ideally be less than 60 characters.
+			          Should be of the syntactic form 'Searches XYZ database.', with a full-stop at the end.
+			"long"  : A more in depth description of the Provider, ideally specifying what it can an can't do, and the they various ways of constructing a query, if applicable. 
+			          Note, this description must be aimed at end users.
+		"""
+		pass
 
 	@abstractmethod
 	def __init__(self):
