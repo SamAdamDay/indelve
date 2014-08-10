@@ -18,7 +18,7 @@ from xdg import BaseDirectory, DesktopEntry
 import xdg.Exceptions
 
 # Import 'local' modules
-import bad # Warnings and exceptions
+from bad import * # Warnings and exceptions
 from utilities import isItemDict
 
 
@@ -53,20 +53,20 @@ class Indelve:
 			try:
 				providerModule = import_module("indelve.providers."+provider)
 			except ImportError:
-				warn(provider, bad.providerLoadWarning)
+				warn(provider, providerLoadWarning)
 				continue
 			# Now load the provider's `Provider` class; if there's an exception with this, then there's a real problem with the code, so let it pass through
 			self.providerInstances[provider] = providerModule.Provider()
 
 
 	def listProviders(self,descriptions=False):
-		"""Lists the possible provider modules.
+		"""List the possible provider modules.
 
 		If `descriptions` is False (default) it just provides a list, otherwise it provides a dict with entries:
 		"provider_name" : {
 			"short" : "<short description>",
 			"long" : "<long description>",
-			 }
+			}
 		See indelve.proivders.abstract.Provider.description for more information.
 		"""
 
@@ -81,15 +81,34 @@ class Indelve:
 			# Otherwise, load up all the provider modules to get their short and long descriptions
 			providerDict = {}
 			for provider in providerList:
-				# Get the description dictionary by loading the the provider module
-				providerModule = import_module("indelve.providers."+provider)
-				descriptionDict = providerModule.Provider.description
-				# Make sure the dictionary has the necessary keys
-				if "short" not in descriptionDict or "long" not in descriptionDict:
-					raise NotImplementedError("Provider '"+provider+"' does not have a proper description dictionary.")
-				# Add it to the dictionary to be returned
-				providerDict[provider] = descriptionDict
+				providerDict[provider] = self.getProviderDescription(provider)
 			return providerDict
+
+
+	def getProviderDescription(self,provider):
+		"""Return a dict of the short and long descriptions of a provider.
+
+		The dict will be:
+			{
+			"short" : "<short description>",
+			"long" : "<long description>",
+			}
+		"""
+
+		# Try to load the provider module
+		try:
+			providerModule = import_module("indelve.providers."+provider)
+		except ImportError:
+			raise providerLoadError(provider)
+
+		# Get the description dictionary
+		descriptionDict = providerModule.Provider.description
+
+		# Make sure the dictionary has the necessary keys
+		if "short" not in descriptionDict or "long" not in descriptionDict:
+			raise NotImplementedError("Provider '"+provider+"' does not have a proper description dictionary.")
+
+		return descriptionDict
 
 
 	def refresh(self,force=False):
