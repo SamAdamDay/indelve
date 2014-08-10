@@ -59,11 +59,37 @@ class Indelve:
 			self.providerInstances[provider] = providerModule.Provider()
 
 
-	def listProviders(self):
-		"""Lists the names of the possible provider modules."""
+	def listProviders(self,descriptions=False):
+		"""Lists the possible provider modules.
 
+		If `descriptions` is False (default) it just provides a list, otherwise it provides a dict with entries:
+		"provider_name" : {
+			"short" : "<short description>",
+			"long" : "<long description>",
+			 }
+		See indelve.proivders.abstract.Provider.description for more information.
+		"""
+
+		# The list of providers will be the `providers` packages's __all__ list
 		initModule = import_module("indelve.providers.__init__")
-		return initModule.__all__
+		providerList = initModule.__all__
+
+		if not descriptions:
+			# If we don't need the descriptions, then this is all we need
+			return providerList
+		else:
+			# Otherwise, load up all the provider modules to get their short and long descriptions
+			providerDict = {}
+			for provider in providerList:
+				# Get the description dictionary by loading the the provider module
+				providerModule = import_module("indelve.providers."+provider)
+				descriptionDict = providerModule.Provider.description
+				# Make sure the dictionary has the necessary keys
+				if "short" not in descriptionDict or "long" not in descriptionDict:
+					raise NotImplementedError("Provider '"+provider+"' does not have a proper description dictionary.")
+				# Add it to the dictionary to be returned
+				providerDict[provider] = descriptionDict
+			return providerDict
 
 
 	def refresh(self,force=False):
