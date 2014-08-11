@@ -40,8 +40,12 @@ class Indelve:
 		Issues a `bad.providerLoadWarning` when a provider couldn't be loaded
 		"""
 
+		# Make sure `providers` is a list or none
+		if providers != None and not isinstance(providers,list):
+			raise ValueError("`providers` must be a list or None.")
+
 		# If `providers` is not specified, load all the provider modules
-		if providers == None:
+		if providers == None or providers == []:
 			providers = self.listProviders()
 
 		# The dictionary of `Provider` class instances
@@ -95,6 +99,10 @@ class Indelve:
 			}
 		"""
 
+		# Make sure `provider` is a string
+		if not isinstance(provider,basestring):
+			raise ValueError("`provider` must be a string.")
+
 		# Try to load the provider module
 		try:
 			providerModule = import_module("indelve.providers."+provider)
@@ -115,7 +123,8 @@ class Indelve:
 		"""Refresh all providers' databases, if that makes sense.
 
 		If the provider does not have a database, then this has no effect on them.
-		The `force` argument indicates that the providers should completely reload their databases, not just check for new items."""
+		The `force` argument indicates that the providers should completely reload their databases, not just check for new items.
+		"""
 
 		# Loop through the provider instances
 		for name in self.providerInstances:
