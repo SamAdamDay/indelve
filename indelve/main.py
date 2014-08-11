@@ -37,15 +37,19 @@ class Indelve:
 	def __init__(self,providers=None):
 		"""Initialise the indelve class, loading the search providers specified by the list `providers` (default:all)
 
-		Issues a `bad.providerLoadWarning` when a provider couldn't be loaded
+		Issues a `bad.ProviderLoadWarning` when a provider couldn't be loaded.
+		Raises a `bad.NoProvidersError` if no providers could be successfully loaded.
+
+		All warnings are derived from `bad.IndelveInitWarning`.
+		All exceptions are derived from `bad.IndelveInitError`.
 		"""
 
 		# Make sure `providers` is a list or none
 		if providers != None and not isinstance(providers,list):
-			raise ValueError("`providers` must be a list or None.")
+			raise TypeError("`providers` must be a list or None.")
 
 		# If `providers` is not specified, load all the provider modules
-		if providers == None or providers == []:
+		if providers == None:
 			providers = self.listProviders()
 
 		# The dictionary of `Provider` class instances
@@ -56,11 +60,15 @@ class Indelve:
 			# Attempt to import the provider, sending a warning that fails
 			try:
 				providerModule = import_module("indelve.providers."+provider)
-			except ImportError:
-				warn(provider, providerLoadWarning)
+			except (ImportError, KeyError):
+				warn(provider, ProviderLoadWarning)
 				continue
 			# Now load the provider's `Provider` class; if there's an exception with this, then there's a real problem with the code, so let it pass through
 			self.providerInstances[provider] = providerModule.Provider()
+
+		# Make sure we've actually loaded some providers
+		if len(self.providerInstances) == 0:
+			raise NoProvidersError()
 
 
 	def listProviders(self,descriptions=False):
@@ -107,7 +115,7 @@ class Indelve:
 		try:
 			providerModule = import_module("indelve.providers."+provider)
 		except ImportError:
-			raise providerLoadError(provider)
+			raise ProviderLoadError(provider)
 
 		# Get the description dictionary
 		descriptionDict = providerModule.Provider.description

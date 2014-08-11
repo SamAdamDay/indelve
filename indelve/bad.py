@@ -6,8 +6,13 @@
 # - Warnings
 # -----------------------------
 
-class providerLoadWarning(Warning):
-	"""The warning class for when a provider couldn't be loaded"""
+class IndelveInitWarning(Warning):
+	"""The warning class for when there was a problem initialising the Indelve class."""
+	pass
+
+
+class ProviderLoadWarning(IndelveInitWarning):
+	"""The warning class for when a provider couldn't be loaded."""
 	pass
 
 
@@ -16,7 +21,7 @@ class providerLoadWarning(Warning):
 # - Exceptions
 # -----------------------------
 
-class providerLoadError(Exception):
+class ProviderLoadError(Exception):
 	"""The exception class for when a provider couldn't be loaded"""
 
 	def __init__(self,provider):
@@ -31,3 +36,13 @@ class providerLoadError(Exception):
 		"""Return an 'informal' string representation of the exception"""
 
 		return "Could not load provider '"+self.provider+"'"
+
+
+class IndelveInitError(Exception):
+	"""The exception class for when there was a problem initialising the Indelve class."""
+	pass
+
+
+class NoProvidersError(IndelveInitError):
+	"""The exception class for when no providers were successfully loaded."""
+	pass

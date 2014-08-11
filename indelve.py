@@ -7,6 +7,8 @@ from argparse import ArgumentParser
 from indelve import Indelve
 import sys
 
+from indelve.bad import *
+
 # The main attraction
 if __name__ == '__main__':
 
@@ -29,6 +31,7 @@ if __name__ == '__main__':
 		"--providers",
 		nargs=1,
 		action="store",
+		default=[""],
 		dest="providers", # Explicit is better than implicit.
 		help="A comma-separated list of the providers to use to determine the results."
 		)
@@ -87,8 +90,16 @@ if __name__ == '__main__':
 	# Get all the arguments
 	args = argParser.parse_args()
 
-	# Initialise indelve
-	indelve = Indelve()
+	# Get the list of providers (defaults to None, ie all providers)
+	providers = args.providers[0].replace(", ",",").split(",")
+	if len(providers) == 0 or providers == [""]:
+		providers = None
+
+	# Initialise indelve with the list of providers
+	try:
+		indelve = Indelve(providers)
+	except IndelveInitWarning as exception:
+		pass
 
 	# Search for for the query
 	items = indelve.search(args.query)
