@@ -2,11 +2,10 @@
 
 # Standard Library
 from argparse import ArgumentParser
+import sys
 
 # Use the indelve package
 from indelve import Indelve
-import sys
-
 from indelve.bad import *
 
 # The main attraction
