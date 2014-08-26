@@ -34,8 +34,9 @@ class Provider:
 	@abstractproperty
 	def description():
 		"""A (read-only) dictionary containing the keys:
-			"short" : A single sentence briefly summarising the Provider. Should ideally be less than 60 characters.
-			          Should be of the syntactic form 'Searches XYZ database.', with a full-stop at the end.
+			"short" : A single sentence briefly summarising the Provider. Aim for at most 80 characters.
+			          Should start with a capital letter and end with a full-stop. The first word should be a present indicative in the third-person singular. Example:
+						'Searches the foo database.'
 			"long"  : A more in depth description of the Provider, ideally specifying what it can an can't do, and the they various ways of constructing a query, if applicable. 
 			          Note, this description must be aimed at end users.
 		"""

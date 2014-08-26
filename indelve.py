@@ -100,8 +100,12 @@ if __name__ == '__main__':
 	except IndelveInitWarning as exception:
 		pass
 
-	# Search for the query
-	items = indelve.search(args.query)
-	
-	for item in items:
-		print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
+	# Descriminate based on the arguments given
+	if arguments.listProviders == True:
+		# Print a comma-separated list of providers
+		print ", ".join(indelve.listProviders())
+	else
+		# Search for the query
+		items = indelve.search(args.query)
+		for item in items:
+			print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
