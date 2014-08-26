@@ -16,7 +16,7 @@ from indelve.bad import *
 
 
 # Constants
-COLUMNS = ("name","exec","description","icon") # The possible colums (ie fields) that can be outputted
+COLUMNS = ("name","exec","description","icon") # The possible colums (ie fields) that can be outputted (these are keys for <item-dict>'s)
 
 
 # An exception class for errors encountered that are probably due to the user
@@ -53,9 +53,9 @@ if __name__ == '__main__':
 		"--providers",
 		nargs=1,
 		action="store",
-		default=[""],
+		default="",
 		dest="providers", # Explicit is better than implicit.
-		help="A comma-separated list of the providers to use to determine the results. Choose from {!s}.".format(COLUMNS)
+		help="A comma-separated list of the providers to use to determine the results."
 		)
 	# Lists all the provider-modules, with 'short' descriptions
 	argParser.add_argument(
@@ -72,6 +72,7 @@ if __name__ == '__main__':
 		nargs=1,
 		dest="providerDescription",
 		metavar="PROVIDER",
+		action="store",
 		help="Give a more detailed description of PROVIDER."
 		)
 	# The keys in each result's <item-dict> to display (see indelve.providers.abstract.Provider.search)
@@ -81,7 +82,7 @@ if __name__ == '__main__':
 		nargs=1,
 		action="store",
 		dest="columns",
-		help="A comma-separted list of the columns to display."
+		help="A comma-separted list of the columns to display. Choose from: {}.".format(", ".join(COLUMNS))
 		)
 	# The format of the results output
 	argParser.add_argument(
@@ -120,8 +121,11 @@ if __name__ == '__main__':
 		## Some setup
 
 		# Get the list of providers (defaults to None, ie all providers)
-		providers = args.providers[0].replace(", ",",").split(",")
-		if len(providers) == 0 or providers == [""]:
+		if args.providers != "":
+			providers = args.providers[0].replace(", ",",").split(",")
+			if len(providers) == 0 or providers == [""]:
+				providers = None
+		else:
 			providers = None
 
 		# Initialise indelve with the list of providers
@@ -134,35 +138,35 @@ if __name__ == '__main__':
 		## Descriminate based on the arguments given
 
 		# Print a comma-separated list of providers
-		if arguments.listProviders[] == True:
+		if args.listProviders == True:
 			for provider in indelve.listProviders():
-				dictionary = indelve.getProviderDescription(arguments.providerDescription)
+				dictionary = indelve.getProviderDescription(provider)
 				# Print the short description formatted correctly
 				print fill(
-					"{0<31} - {1}".format(
-						arguments.providerDescription,
-						dictionary.short
+					"{:<31} - {}".format(
+						provider,
+						dictionary["short"]
 					),
 					width = terminalWidth,
 					subsequent_indent = " "*34
 					)
 
 		# Print a detailed description of the specified provider, if possible
-		elif arguments.providerDescription != None:
+		elif args.providerDescription != None:
 			try:
-				dictionary = indelve.getProviderDescription(arguments.providerDescription[0])
-				print arguments.providerDescription[0]
-				print dictionary.long
+				dictionary = indelve.getProviderDescription(args.providerDescription[0])
+				print args.providerDescription[0]
+				print dictionary["long"]
 			except ProviderLoadError:
-				raise HumanError("Couldn't load description for provider '{}'".format(arguments.providerDescription[0]))
+				raise HumanError("Couldn't load description for provider '{}'".format(args.providerDescription[0]))
 
 		# Search for the query
 		else:
 
 			# Determine if we want to use custom columns
 			columns = ["name","description","exec"]
-			if arguments.columns[0] != None:
-				columns = arguments.columns[0].replace(", ",",").split(",")
+			if args.columns != None:
+				columns = args.columns[0].replace(", ",",").split(",")
 				for col in columns:
 					if not col in COLUMNS:
 						raise HumanError("'{}' is not a valid column".format(col)) 
