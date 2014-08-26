@@ -7,6 +7,7 @@ Requirements
 ------------
 - Python 2.7
 - PyXDG
+- Python Tabulate (in pypi; only for the command-line utility)
 
 License
 -------

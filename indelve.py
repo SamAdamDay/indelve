@@ -7,6 +7,9 @@ import sys
 from textwrap import fill
 import console
 
+# Third party libraries
+from tabulate import tabulate
+
 # Use the indelve package
 from indelve import Indelve
 from indelve.bad import *
@@ -166,8 +169,8 @@ if __name__ == '__main__':
 
 			# Search for the query
 			items = indelve.search(args.query)
-			for item in items:
-				print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
+			flattened = [[item[col] for col in columns] for item in items]
+			print tabulate(flattened,columns)
 
 	except HumanError as ex:
 		print "ERROR: {!s}".format(ex)
