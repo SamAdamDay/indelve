@@ -1,15 +1,35 @@
 #!/usr/bin/python
 
+
 # Standard Library
 from argparse import ArgumentParser
 import sys
+from textwrap import fill
+import console
 
 # Use the indelve package
 from indelve import Indelve
 from indelve.bad import *
 
+
+# Constants
+COLUMNS = ("name","exec","description","icon") # The possible colums (ie fields) that can be outputted
+
+
+# An exception class for errors encountered that are probably due to the user
+class HumanError(Exception):
+	pass
+
+
 # The main attraction
 if __name__ == '__main__':
+
+
+	# Get the terminal dimensions
+	(terminalWidth, terminalHeight) = console.getTerminalSize()
+
+
+	## The argument parser
 
 	# Initialise the argument parser
 	argParser = ArgumentParser(
@@ -32,7 +52,7 @@ if __name__ == '__main__':
 		action="store",
 		default=[""],
 		dest="providers", # Explicit is better than implicit.
-		help="A comma-separated list of the providers to use to determine the results."
+		help="A comma-separated list of the providers to use to determine the results. Choose from {!s}.".format(COLUMNS)
 		)
 	# Lists all the provider-modules, with 'short' descriptions
 	argParser.add_argument(
@@ -89,23 +109,65 @@ if __name__ == '__main__':
 	# Get all the arguments
 	args = argParser.parse_args()
 
-	# Get the list of providers (defaults to None, ie all providers)
-	providers = args.providers[0].replace(", ",",").split(",")
-	if len(providers) == 0 or providers == [""]:
-		providers = None
 
-	# Initialise indelve with the list of providers
+	# The main try-block, catching HumanError's
 	try:
-		indelve = Indelve(providers)
-	except IndelveInitWarning as exception:
-		pass
 
-	# Descriminate based on the arguments given
-	if arguments.listProviders == True:
+
+		## Some setup
+
+		# Get the list of providers (defaults to None, ie all providers)
+		providers = args.providers[0].replace(", ",",").split(",")
+		if len(providers) == 0 or providers == [""]:
+			providers = None
+
+		# Initialise indelve with the list of providers
+		try:
+			indelve = Indelve(providers)
+		except NoProvidersError:
+			raise HumanError("No providers loaded")
+
+
+		## Descriminate based on the arguments given
+
 		# Print a comma-separated list of providers
-		print ", ".join(indelve.listProviders())
-	else
+		if arguments.listProviders[] == True:
+			for provider in indelve.listProviders():
+				dictionary = indelve.getProviderDescription(arguments.providerDescription)
+				# Print the short description formatted correctly
+				print fill(
+					"{0<31} - {1}".format(
+						arguments.providerDescription,
+						dictionary.short
+					),
+					width = terminalWidth,
+					subsequent_indent = " "*34
+					)
+
+		# Print a detailed description of the specified provider, if possible
+		elif arguments.providerDescription != None:
+			try:
+				dictionary = indelve.getProviderDescription(arguments.providerDescription[0])
+				print arguments.providerDescription[0]
+				print dictionary.long
+			except ProviderLoadError:
+				raise HumanError("Couldn't load description for provider '{}'".format(arguments.providerDescription[0]))
+
 		# Search for the query
-		items = indelve.search(args.query)
-		for item in items:
-			print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
+		else:
+
+			# Determine if we want to use custom columns
+			columns = ["name","description","exec"]
+			if arguments.columns[0] != None:
+				columns = arguments.columns[0].replace(", ",",").split(",")
+				for col in columns:
+					if not col in COLUMNS:
+						raise HumanError("'{}' is not a valid column".format(col)) 
+
+			# Search for the query
+			items = indelve.search(args.query)
+			for item in items:
+				print item["relevance"] , ": " , item["name"] , "[ " + item["description"] , "]"
+
+	except HumanError as ex:
+		print "ERROR: {!s}".format(ex)
