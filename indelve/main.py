@@ -44,7 +44,7 @@ class Indelve:
 		All exceptions are derived from `bad.IndelveInitError`.
 		"""
 
-		# Make sure `providers` is a list or none
+		# Make sure `providers` is a list or None
 		if providers != None and not isinstance(providers,list):
 			raise TypeError("`providers` must be a list or None.")
 
