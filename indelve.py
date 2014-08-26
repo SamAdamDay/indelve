@@ -100,7 +100,7 @@ if __name__ == '__main__':
 	except IndelveInitWarning as exception:
 		pass
 
-	# Search for for the query
+	# Search for the query
 	items = indelve.search(args.query)
 	
 	for item in items:
